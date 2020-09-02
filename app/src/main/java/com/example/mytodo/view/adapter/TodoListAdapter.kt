@@ -26,6 +26,10 @@ class TodoListAdapter(var todoItems : ArrayList<TodoModel>) : RecyclerView.Adapt
         todoViewHolder.bind(todoModel)
     }
 
+    fun addItem(todoModel : TodoModel){
+        todoItems.add(todoModel)
+    }
+
     class TodoViewHolder(view : View) : RecyclerView.ViewHolder(view){
 
         val title = view.tv_todo_title
