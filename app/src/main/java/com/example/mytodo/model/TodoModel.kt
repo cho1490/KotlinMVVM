@@ -13,9 +13,12 @@ data class TodoModel (
     @ColumnInfo(name = "title")
     var title: String,
 
-    //https://doitddo.tistory.com/54?category=855312
+    @ColumnInfo(name = "description")
     var description: String,
 
-
+    @ColumnInfo(name = "createdDate")
     var createdDate: Long
-){}
+
+){
+    constructor() : this(null, "", "", -1)
+}

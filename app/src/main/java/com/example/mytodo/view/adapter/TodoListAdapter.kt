@@ -8,7 +8,9 @@ import com.example.mytodo.R
 import com.example.mytodo.model.TodoModel
 import kotlinx.android.synthetic.main.item_todo.view.*
 
-class TodoListAdapter(var todoItems : ArrayList<TodoModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class TodoListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+
+    private var todoItems : List<TodoModel> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_todo, parent, false)
@@ -26,8 +28,9 @@ class TodoListAdapter(var todoItems : ArrayList<TodoModel>) : RecyclerView.Adapt
         todoViewHolder.bind(todoModel)
     }
 
-    fun addItem(todoModel : TodoModel){
-        todoItems.add(todoModel)
+    fun setTodoItems(todoItems : List<TodoModel>) {
+        this.todoItems = todoItems
+        notifyDataSetChanged()
     }
 
     class TodoViewHolder(view : View) : RecyclerView.ViewHolder(view){

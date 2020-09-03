@@ -3,10 +3,12 @@ package com.example.mytodo.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mytodo.R
 import com.example.mytodo.model.TodoModel
 import com.example.mytodo.view.adapter.TodoListAdapter
+import com.example.mytodo.viewmodel.TodoViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.customlayout.view.*
 import java.util.*
@@ -14,8 +16,8 @@ import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
+    lateinit var  mTodoViewModel : TodoViewModel
     lateinit var mTodoListAdapter : TodoListAdapter
-    private var mTodoItems : ArrayList<TodoModel> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,10 +25,18 @@ class MainActivity : AppCompatActivity() {
 
         initRecyclerView()
         initAddButton()
+        initViewModel()
+    }
+
+    private fun initViewModel(){
+        mTodoViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(TodoViewModel::class.java)
+        mTodoViewModel.getTodoList().observe(this, androidx.lifecycle.Observer {
+            mTodoListAdapter.setTodoItems(it)
+        })
     }
 
     private fun initRecyclerView() {
-        mTodoListAdapter = TodoListAdapter(mTodoItems)
+        mTodoListAdapter = TodoListAdapter()
 
         recyclerview_toto_list.run {
             setHasFixedSize(true)
@@ -51,9 +61,8 @@ class MainActivity : AppCompatActivity() {
                 val description = dialogView.edittext_todo_description.text.toString()
                 val createdDate = Date().time
 
-                val todoModel = TodoModel(title, description, createdDate)
-                mTodoListAdapter.addItem(todoModel)
-                mTodoListAdapter.notifyDataSetChanged()
+                val todoModel = TodoModel(null, title, description, createdDate)
+                mTodoViewModel.insertTodo(todoModel)
             })
             .setNegativeButton("취소",  null)
             .create()
